@@ -1,0 +1,26 @@
+{
+  "name": "mychat",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bson-objectid": "^1.1.4",
+    "cluster": "^0.7.7",
+    "ejs": "^2.5.5",
+    "express": "^4.14.0",
+    "express-ejs-layouts": "^2.2.0",
+    "moment": "^2.17.1",
+    "net": "^1.0.2",
+    "q": "^1.4.1",
+    "redis": "^2.6.3",
+    "serve-favicon": "^2.3.2",
+    "socket.io": "^1.7.2",
+    "socket.io-redis": "^2.0.1",
+    "underscore": "^1.8.3"
+  }
+}

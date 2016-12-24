@@ -1,0 +1,128 @@
+
+<h3><a href="/me"><%= user.username %></a></h3>
+
+<% include ./partials/partial-title-chat.html %>
+
+
+
+
+<div id="nickWrap" style="margin-bottom:1em;">
+    <p style="padding: .2em 0;">Enter a user name:</p>
+    <form id="setNick">
+      <input type="text" size="35" id="nickname" />
+      <input type="submit" />
+      <span id="nickError" style="font-size:1em;margin:.2em;">&nbsp;</span>
+    </form>     
+</div>
+ 
+<div id="contentWrap">
+<div id="chatWrap">
+    <div id="chat"></div>
+    <form id="send-message">
+      <input type="text" id="message" size="35" />
+      <input type="submit" />
+    </form>
+  </div>
+
+  <h3>Users List:</h3>
+  <div id="users"></div>
+</div>
+
+
+<%- contentFor('style') %>
+<style type="text/css">
+  #chat {
+    height: 260px;
+    /*border-radius: 10px;*/
+    background-color: whitesmoke;
+    max-width: 600px;
+    margin-bottom: .5em;
+    padding: .5em;
+    border: 1px solid #909090;
+    overflow-y:scroll;
+  }
+  #nickWrap {
+    margin-bottom: .3em;
+  }
+  p {
+    margin:0;
+  }
+  #nickError {
+    color: red;
+    font-style: oblique;
+  }
+</style>
+
+
+<%- contentFor('script') %>
+<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+
+<script type="text/javascript">
+  jQuery(function ($) {
+    var socket = io.connect();
+
+    var $nickForm   = $("#setNick");
+    var $nickError  = $("#nickError");
+    var $nickBox  = $("#nickname");
+    var $usersBox   = $("#users");
+
+    var $messageForm  = $("#send-message");
+    var $messageBox   = $("#message");
+    var $chatBox    = $("#chat");
+    var ticket = '<%= ticket %>';
+
+    $nickForm.submit(function(e) {
+      e.preventDefault();
+      $nickError.html("");
+
+      var username  = $.trim($nickBox.val());
+
+      if (username.length == 0) {
+        $nickError.html("请输入用户名！");
+        return;
+      }
+
+      socket.emit('set username', {username:username, ticket: ticket}, function(data) {
+        if (!data) {
+          $nickError.html("Invalid user name!");
+          return;
+        }
+      });
+
+      $nickBox.val('');
+    });
+
+    $messageForm.submit(function(e) {
+      e.preventDefault();
+      if ($messageBox.val().length == 0) return;
+
+      socket.emit('send message', $messageBox.val(), function(data) {
+        // TODO
+      });
+
+      $messageBox.val('');
+
+      $("#chat").animate({ scrollTop: $('#chat')[0].scrollHeight}, 10);
+    });
+
+    socket.on('new message', function(data) {
+      $chatBox.append( "<b>" + data.username + "</b>" + ":" + data.msg + "<br />");
+    });
+
+    socket.on('new message ' + ticket, function(data) {
+      $chatBox.append( "<b>" + data.username + "</b>" + ":" + data.msg + "<br />");
+    });
+
+    socket.on('user joined', function(data) {
+      $usersBox.html('');
+      $usersBox.append(data + "<br />");
+    });
+
+
+  });
+</script>
+
+
+
+<%- contentFor('title') %>
+Chat Title
