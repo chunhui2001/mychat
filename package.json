@@ -32,6 +32,7 @@
   },
   "devDependencies": {
     "fakeredis": "^1.0.3",
-    "mocha": "^3.2.0"
+    "mocha": "^3.2.0",
+    "sc-hot-reboot": "^1.0.0"
   }
 }
