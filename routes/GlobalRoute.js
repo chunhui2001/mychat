@@ -5,6 +5,8 @@ var authController      = require('../controllers/auth-controller');
 
 module.exports = function (argument) {
 	
+	"use strict";
+
 	GlobalRoute.route('/')
 		.get(authController.ensureAuthenticated, function (req, res) {
 			res.render('index');
