@@ -30,3 +30,25 @@
 
 # 3. socketcluster
 # http://socketcluster.io/#!/docs/getting-started
+
+
+
+# HAProxy Loadbalancer
+$ sudo apt-get install haproxy
+> sudo vi /etc/default/haproxy
+  ENABLE=1
+
+
+$ sudo service haproxy status$
+
+$ sudo vi /etc/haproxy/haproxy.cfg
+> frontend tutorial_in
+	bind *:80
+	default_backend tutorial_http
+
+  backend tutorial_http
+  	server web1 192.168.0.1:80 check
+  	server web2 192.168.0.2:80 check
+  	server web2 192.168.0.3:80 check
+  	server web2 192.168.0.4:80 check
+

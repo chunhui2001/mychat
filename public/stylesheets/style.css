@@ -1,0 +1,26 @@
+body {
+	max-width: 1024px;
+	margin:auto;
+}
+
+
+.phone-list .fa {
+	font-size: 1.5em;
+	color:gray;
+}
+
+.phone-list .status .fa-check {
+	color:#337ab7;
+}
+
+.phone-list .status .fa-close {
+	color:#a94442;
+}
+
+.phone-list .infos a {
+	display: inline-block;
+    width: 30px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}

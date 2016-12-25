@@ -1,22 +1,47 @@
-<!doctype html>
-<html> 
-  <head>
+<!DOCTYPE html>
+<html ng-app="starter" xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+<head>
     <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
     <title><%-defineContent('title')%></title>
-    <meta name="description" content="">
-    <meta name="author" content="">
 
-	  <%-defineContent('style')%>
-    </head>
-  </head>
-  <body>
-  	<div class="main-content">
+    <link rel="shortcut icon" href='/favicon/siafu.ico' type="image/x-icon">
+    <link rel="icon" href='/favicon/siafu.ico' type="image/x-icon">
+
+    <!-- Bootstrap -->
+    <link type="text/css" href="/libs/bootstrap/bootstrap-v3.3.7.min.css" rel="stylesheet">
+    <link type="text/css" href="/libs/font-awesome/font-awesome-4.6.3.min.css" rel="stylesheet">
+    <!-- <link type="text/css" href="/libs/angular/angular-motion-v0.4.4.min.css" rel="stylesheet"> -->
+    <link type="text/css" href="/libs/bootstrap/bootstrap-additions-v0.3.1.min.css" rel="stylesheet">
+    <link type="text/css" href="/libs/bootstrap/fileinput.min.css" rel="stylesheet">
+    <link type="text/css" href="/stylesheets/style.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="/libs/html5shiv-3.7.3.min.js"></script>
+    <script src="/libs/respond-1.4.2.min.js"></script>
+    <![endif]-->
+
+
+      <%-defineContent('style')%>
+</head>
+
+<body>
     <%- body %>
-    </div>
 
-	 <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script type="text/javascript" src="/libs/jquery/jquery-1.12.4.min.js"></script>
+    <!-- <script type="text/javascript" src="/javascripts/app.js"></script> -->
+    
     <%-defineContent('script')%>
+</body>
+</html>
 
 
-  </body>
-</html>  
+
