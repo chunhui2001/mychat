@@ -47,6 +47,12 @@ $ sudo vi /etc/haproxy/haproxy.cfg
 
 
 
+# 5. 600k concurrent websocket connections on AWS using Node.js
+# https://blog.jayway.com/2015/04/13/600k-concurrent-websocket-connections-on-aws-using-node-js/
+> node --nouse-idle-notification --expose-gc --max-new-space-size=2048 --max-old-space-size=8192 server_cluster.js
+
+
+
 
 
 
