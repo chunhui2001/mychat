@@ -36,7 +36,7 @@
 <body>
 
     <%if (isAuthenticated) { %>
-        <h3><a href="/me"><%= user.username %></a> &nbsp; <a style="font-size:.75em;color:cadetblue;font-style: oblique;" href="/logout">Logout</a></h3>
+    <h3><a href="/me"><%= user.username %></a> &nbsp; <a style="font-size:.75em;color:cadetblue;font-style: oblique;" href="/logout">Logout</a></h3>
     <% } %>
 
     <%- body %>
