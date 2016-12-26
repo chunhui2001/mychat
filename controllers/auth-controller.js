@@ -25,11 +25,17 @@ function verifyCredentials(username, password, done) {
 
 exports.ensureAuthenticated = function (req, res, next) {
     if (req.isAuthenticated()) {
-        next();
-    } else {
-        // redirect to login page
-        res.redirect('/login');
+        return next();
+    } 
+
+    var loginUri      = '/login';
+
+    if (req.originalUrl != '/' && req.originalUrl != loginUri) {
+        loginUri = loginUri + '?b=' + req.originalUrl.replace('/login?b=', '');
     }
+
+    // redirect to login page
+    res.redirect(loginUri);
 }
 
 

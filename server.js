@@ -51,6 +51,7 @@ app.use(require('./middlewares/locals.js'));
 
 
 app.use(require('./routes/GlobalRoute')());
+app.use(require('./routes/CinemaRoute')());
 
 
 

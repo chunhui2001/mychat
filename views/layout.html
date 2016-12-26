@@ -34,6 +34,11 @@
 </head>
 
 <body>
+
+    <%if (isAuthenticated) { %>
+        <h3><a href="/me"><%= user.username %></a> &nbsp; <a style="font-size:.75em;color:cadetblue;font-style: oblique;" href="/logout">Logout</a></h3>
+    <% } %>
+
     <%- body %>
 
     <script type="text/javascript" src="/libs/jquery/jquery-1.12.4.min.js"></script>
