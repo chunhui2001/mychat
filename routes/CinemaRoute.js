@@ -9,7 +9,7 @@ module.exports = function (argument) {
 
 	CinemaRoute.route('/cinema')
 		.get(authController.ensureAuthenticated, function (req, res) {
-			res.render('ciname/index');
+			res.render('cinema/index');
 		});
 
 	return CinemaRoute;
