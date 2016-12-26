@@ -53,6 +53,11 @@ $ sudo vi /etc/haproxy/haproxy.cfg
 
 
 
+# How To Secure HAProxy with Let's Encrypt on Ubuntu 14.04:
+# https://www.digitalocean.com/community/tutorials/how-to-secure-haproxy-with-let-s-encrypt-on-ubuntu-14-04
+
+
+
 
 
 
