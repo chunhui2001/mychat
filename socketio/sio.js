@@ -30,6 +30,7 @@ module.exports = function (server, sessionMiddleware) {
     // write business code here
     io.sockets.on('connection', function (socket) {
 
+        console.log(socket.request.session, 'socket.request.session.user_id');
         console.log(socket.request.session.passport.user, 'socket.request.session.user_id');
 
         socket.on('set username', function(data, callback) {
