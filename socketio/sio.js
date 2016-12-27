@@ -10,22 +10,27 @@ var redisClient = redis.createClient('redis://127.0.0.1:6379');
 var UserRepo = require('../repository/user-repository');
 
 
- function run(server) {
+module.exports = function (server, sessionMiddleware) {
 
     var    io = sio(server); 
 
     io.adapter(sio_redis({ host: 'localhost', port: 6379 }));
 
+    io.use(function (socket, next) {
+        sessionMiddleware(socket.request, socket.request.res, next);
+    });
+
     process.on('message', function(message, connection) {
-        if (message !== 'sticky-session:connection') {
+        if (message !== 'sticky-session:connection')
             return;
-        }
         server.emit('connection', connection);
         connection.resume();
     });
     
     // write business code here
-    io.on('connection', function (socket) {
+    io.sockets.on('connection', function (socket) {
+
+        console.log(socket.request.session.passport.user, 'socket.request.session.user_id');
 
         socket.on('set username', function(data, callback) {
 
@@ -99,4 +104,4 @@ var UserRepo = require('../repository/user-repository');
  }
 
 
- module.exports.run = run;
+ // module.exports.run = run;

@@ -37,6 +37,8 @@ app.engine('.html', ejs.renderFile);
 app.set('view engine', 'html');
 app.set('views', path.join(__dirname, 'views'));
 
+var sessionMiddleware   = require('./middlewares/session.js');
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
@@ -44,7 +46,7 @@ app.use(cookieParser());
 app.use(ejsLayouts);
 
 
-app.use(require('./middlewares/session.js'));
+app.use(sessionMiddleware);
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(require('./middlewares/locals.js'));
@@ -58,9 +60,10 @@ app.use(require('./routes/CinemaRoute')());
 function startServer(port) {   
 
     var defaultPort = 3000; 
+    var server = null;
 
     if (port) {
-        var server = app.listen(0, 'localhost', function (argument) {
+        server = app.listen(0, 'localhost', function (argument) {
             console.log(`Your server in running on ${port || defaultPort}, ` + app.get('env'));
         });
     }
@@ -73,7 +76,7 @@ function startServer(port) {
         });
     }
 
-    require('./socketio/sio').run(server);
+    require('./socketio/sio')(server, sessionMiddleware);
 }
 
 

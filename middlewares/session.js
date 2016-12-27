@@ -7,7 +7,7 @@ var ObjectId    	= require('bson-objectid');
 
 module.exports = expressSession({
 	genid: function(req) {
-	return ObjectId.generate() 
+		return ObjectId.generate() 
 	},
 	secret: 'keyboard cat',
 	resave: false,
