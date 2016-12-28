@@ -7,9 +7,11 @@ module.exports = function (argument) {
 	
 	"use strict";
 
-	CinemaRoute.route('/cinema')
+	CinemaRoute.route('/cinema/:cinemaId')
 		.get(authController.ensureAuthenticated, function (req, res) {
-			res.render('cinema/index');
+			var cinemaId 	= req.params.cinemaId;			
+			// key: cinemaId_roomId_date_time_moveId_seatId
+			res.render('cinema/index', {cinemaId: cinemaId});
 		});
 
 	return CinemaRoute;
