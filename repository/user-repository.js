@@ -31,7 +31,7 @@ function add(user, client) {
 function remove(field_name, client) {
 	// del users_ keesh.zhang
 	return q.Promise(function (resolve, reject, notify) {
-		client.del(_USER_KEY, field_name, function (err, affectRowCount) {
+		client.hdel(_USER_KEY, field_name, function (err, affectRowCount) {
 			if (err) reject(err);
 			resolve(affectRowCount);
 		});

@@ -2,7 +2,10 @@ var passport    = require('passport');
 var passportLocal   = require('passport-local');
 
 
-passport.use(new passportLocal.Strategy(verifyCredentials));
+passport.use(new passportLocal.Strategy({
+    usernameField: 'username',
+    passwordField: 'password'
+  }, verifyCredentials));
 
 
 passport.serializeUser(function (user, done) {

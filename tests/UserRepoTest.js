@@ -64,7 +64,6 @@ describe('Repository Test', function(){
     UserRepo.add({username: 'keesh.zhang2', ticket: ObjectId.generate()}, client).done(function (isOk) {
       assert.equal('OK', isOk);  
       UserRepo.remove('keesh.zhang2', client).done(function (affectRowCount) {
-        console.log(affectRowCount, 'affectRowCount');
         assert.equal(1, affectRowCount);
         done();
       });
