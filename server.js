@@ -12,6 +12,8 @@ var favicon   = require('serve-favicon');
 var path    = require('path');
 var scHotReboot = require('sc-hot-reboot');
 
+var NotFoundError = require('./errors/NotFoundError');
+
 
 var environment = process.env.ENV || 'dev';
 
@@ -78,6 +80,44 @@ function startServer(port) {
 
     require('./socketio/sio')(server, sessionMiddleware);
 }
+
+app.use(function (req, res, next) {
+    res.status(404);
+    res.type('text/plain');
+    next(new NotFoundError("404"));
+});
+
+
+app.use(function (err, req, res, next) {
+
+    var errorType = typeof err,
+        code = 500,
+        msg = { message: "Internal Server Error" };
+
+    switch (err.name) {
+        case "UnauthorizedError":
+            code = err.status;
+            msg = undefined;
+            break;
+        case "BadRequestError":
+        case "UnauthorizedAccessError":
+        case "NotFoundError":
+            code = err.status;
+            msg = err.message;
+            break;
+        case "AuthorizationError":
+            code = err.status;
+            msg = err.message;
+            break;
+        default:
+            break;
+    }
+
+    console.log(err.instance(), 'err');
+
+    return res.status(code).json(msg);
+
+});
 
 
 if (require.main == module) {
