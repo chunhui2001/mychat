@@ -16,6 +16,6 @@ function UnauthorizedAccessError(code, error) {
 UnauthorizedAccessError.prototype = Object.create(Error.prototype);
 UnauthorizedAccessError.prototype.constructor = UnauthorizedAccessError;
 
-util.inherits(NotFoundError, Errors);
+util.inherits(UnauthorizedAccessError, Errors);
 
 module.exports = UnauthorizedAccessError;

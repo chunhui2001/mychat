@@ -19,7 +19,6 @@ var environment = process.env.ENV || 'dev';
 
 var app = new express();
 
-
 if (environment != 'production') {
     console.log(`   !! The sc-hot-reboot plugin is watching for code changes in the ${__dirname} directory`);
     scHotReboot.attach(null, {
@@ -29,6 +28,8 @@ if (environment != 'production') {
 
     app.use(logger('dev'));
 }
+
+var _TicketJob = require('./cronjobs/TicketCronJob')().start();
 
 
 app.use(express.static(path.join(__dirname, 'public')));

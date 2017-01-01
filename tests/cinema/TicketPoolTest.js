@@ -7,8 +7,8 @@ var redisClient = redis.createClient('redis://127.0.0.1:6379/9');
 
 var ticket_pool = path.join(__dirname, '../../repository/cinema/ticket_pool.json');
 
-var TicketPoolRepo = require('../../repository/cinema/TicketPoolRepository');
-
+var TicketPoolRepository = require('../../repository/cinema/TicketPoolRepository');
+var TicketPoolRepo = new TicketPoolRepository();
 
 
 describe('Ticket Pool Test', function(){
