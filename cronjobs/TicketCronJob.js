@@ -32,7 +32,7 @@ function ticketJob(argument) {
 			// console.log(typeof ticket === 'object' ? JSON.stringify(ticket) : ticket, '88');
 
 			TicketQueneRepo.add(theTicketKey, ticket, redisClient).done(function (ok) {
-				console.log(TicketQueneRepo.hashKey() + "#" + theTicketKey, ok);
+				// console.log(TicketQueneRepo.hashKey() + "#" + theTicketKey, ok);
 				// console.log(JSON.stringify(ticket), 'ticket');
 			});
 

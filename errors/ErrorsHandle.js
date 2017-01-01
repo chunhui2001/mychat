@@ -25,7 +25,7 @@ module.exports = function (err, req, res, next) {
             break;
     }
 
-    console.log(err.instance(), 'err');
+    console.log(typeof err.instance !== 'undefined' ? err.instance() : err, 'err');
 
     return res.status(code).json(msg);
 
