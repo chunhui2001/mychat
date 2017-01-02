@@ -41,8 +41,18 @@
   }
 
   .seat-container div.seat.locked {
-  	background-image: url(/images/seat-sel.png);
+  	background-image: url(/images/seat-lock.png);
   }
+
+  .seat-container div.seat.sel {
+    background-image: url(/images/seat-sel.png);
+  }
+
+  .seat-container .s-panel {
+    margin-top: .5em;
+    padding: .5em;
+  }
+
   .s-row.col-number {
   	width:40px;
   }

@@ -37,7 +37,9 @@
 
 				<% for (var i=0; i<seatMapSortRowKey.length; i++) { %>				
 				<div class="s-row">
+
 					<% var seatMapSortColKey = Object.keys(seatMap[seatMapSortRowKey[i]]).sort(); %>
+
 					<% for (var j=0; j<seatMapSortColKey.length; j++) { %>	
 					<% var currentSeat = seatMap[seatMapSortColKey[i]][seatMapSortColKey[j]]; %>
 					<div class="seat <%= currentSeat.status %>" 
@@ -49,7 +51,11 @@
 					<div class="clearFix"></div>
 				</div>
 				<% } %>	
-			
+			</div>
+			<div class="s-row s-panel" >
+				<button type="button" class="btn btn-success s-confirm">选定</button>
+				<button type="button" class="btn btn-info s-clear-sel">重选</button>
+				<button type="button" class="btn btn-warning s-refresh">Warning</button>
 			</div>
 		</div>
 		
@@ -67,7 +73,28 @@
 <script type="text/javascript">
 
 $(function (argument) {
+
 	canvalLoading("loadingCanvas");
+
+
+	jQuery(function ($) {
+
+		var socket = io.connect();
+
+		$(document).on("click", ".seat-body .s-row .seat", function () {
+
+			if ($(this).hasClass("sel")) {
+				$(this).removeClass("sel"); 
+				return;
+			}
+
+			if ($(this).attr("data-seat-status") != 'pending') return;
+
+			$(this).addClass("sel");
+		});
+
+	});
+
 });
 </script>
 
