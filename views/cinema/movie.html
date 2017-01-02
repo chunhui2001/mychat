@@ -52,8 +52,8 @@
 				</div>
 				<% } %>	
 			</div>
-			<div class="s-row s-panel" >
-				<button type="button" class="btn btn-success s-confirm">选定</button>
+			<div class="s-row s-panel" style="display:none;">
+				<button type="button" class="btn btn-success s-confirm">确认选择</button>
 				<button type="button" class="btn btn-info s-clear-sel">重选</button>
 				<button type="button" class="btn btn-warning s-refresh">Warning</button>
 			</div>
@@ -85,12 +85,24 @@ $(function (argument) {
 
 			if ($(this).hasClass("sel")) {
 				$(this).removeClass("sel"); 
+
+				if($(".seat-body .seat.sel").length == 0) $(".seat-container .s-panel").slideUp();
+
 				return;
 			}
 
 			if ($(this).attr("data-seat-status") != 'pending') return;
 
 			$(this).addClass("sel");
+
+			if(!$(".seat-container .s-panel").is(":visible")) {
+				$(".seat-container .s-panel").slideDown();
+			}
+
+		});
+
+		$(document).on("click", ".s-panel .s-clear-sel", function () {
+			$(".seat-body .seat.sel").removeClass("sel");
 		});
 
 	});
