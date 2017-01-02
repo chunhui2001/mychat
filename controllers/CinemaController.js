@@ -41,10 +41,27 @@ module.exports = {
 
 			});
 
-			console.log(Object.keys(seatMap).sort(), 'seatMap');
 
 			res.render('cinema/movie', {movieId: movieId, ticketList: ticket_list == null ? {} : ticket_list, seatMap: seatMap});
 		});
 		
+	},
+
+	createOrder: function (req, res) {
+
+		var ticketKeyList 	= req.body.ticketKeyList || [];
+
+		if (ticketKeyList.length == 0) return res.json(0);
+
+		// 1. delete ticket quene keys
+		// 2. update ticket pool status
+
+		// 1.
+		TicketQueneRepo.remove(ticketKeyList, redisClient).done(function (affectRowCount) {
+			res.json(affectRowCount);
+		});
+
 	}
+
+
 }

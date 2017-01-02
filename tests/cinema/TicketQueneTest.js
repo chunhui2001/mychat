@@ -2,10 +2,13 @@ var assert = require('assert');
 var path = require('path');
 var moment = require('moment');
 var fs = require('fs');
+var nimble = require('nimble');
 var redis = require('redis');
 var redisClient = redis.createClient('redis://127.0.0.1:6379/9');
 
+var TicketPoolRepository = require('../../repository/cinema/TicketPoolRepository');
 var TicketQueneRepository = require('../../repository/cinema/TicketQueneRepository');
+var TicketPoolRepo = new TicketPoolRepository();
 var TicketQueneRepo = new TicketQueneRepository();
 
 
@@ -15,16 +18,68 @@ describe('Ticket Quene Test', function(){
 	"use strict";
 
 
-	it('Check a Ticket Exists', function (done) {
+	// it('#Check a Ticket Exists', function (done) {
 		
-		var key = "c62479_005_20170101_19:40_CNXJ0056301_FR1A05#04_locked";
+	// 	// var key = "c62479_005_20170101_19:40_CNXJ0056301_FR1A05#04_locked";
+	// 	var key = "c62479_005_20170101_19:40_CNXJ0056301_FR1A01#01_pending";
+	// 	var key = "c62479_005_20170101_19:40_CNXJ0056301_FR1A01#01_locked";
 
-		TicketQueneRepo.exists(key, redisClient).done(function (exists) {
-			assert.equal( true, exists, "["+key+"]: not exists!");
-			done();
-		});
+	// 	TicketQueneRepo.exists(key, redisClient).done(function (exists) {
+	// 		assert.equal( true, exists, "["+key+"]: not exists!");
+	// 		done();
+	// 	});
+
+	// });
+
+	// it('#update a Ticket ', function (done) {
+		
+	// 	var key = "c62479_005_20170101_19:40_CNXJ0056301_FR1A01#01_locked";
+
+	// 	TicketQueneRepo.get(key, redisClient).done(function (ticket) {
+	// 		assert.equal( true,	ticket != null, "["+key+"]: not exists!");
+	// 		var newTicket = JSON.parse(ticket);
+	// 		// newTicket.status = 'pending';
+	// 		TicketQueneRepo.update(key, newTicket, redisClient).done(function (ok) {
+	// 			assert.equal('OK', ok, "["+key+"]: update failed!");
+	// 			done();
+	// 		});			
+	// 	});
+
+	// });
+
+	it ('从票池中取出所有票，根据状态推入 待售、锁定、已售', function (done) {
+		// 从票池中取出所有票，根据状态推入 待售、锁定、已售
+		
+
+		nimble.series([
+	    	function(callback) {
+		        TicketQueneRepo.delHash(redisClient).done(function (affectRowCount) {
+					assert.equal(true, affectRowCount >= 0);
+					callback();
+				});
+		    },
+		    function (callback) {
+		    	TicketPoolRepo.list(redisClient).done(function (ticket_list) {					
+					Object.keys(ticket_list).forEach(function (ticketKey) {						
+						var ticket = JSON.parse(ticket_list[ticketKey]);
+						var theTicketKey = ticketKey + "_" + ticket.status;
+						// console.log(typeof ticket === 'object' ? JSON.stringify(ticket) : ticket, '88');
+						TicketQueneRepo.add(theTicketKey, ticket, redisClient).done(function (ok) {
+							// console.log(TicketQueneRepo.hashKey() + "#" + theTicketKey, ok);
+							// console.log(JSON.stringify(ticket), 'ticket');
+						});
+						// console.log(JSON.stringify(ticket), 'ticket');
+					});
+					callback();
+				});
+		    }, 
+		    function (callback) {
+		    	done();
+		    }
+		]);	
 
 	});
+	
 
 	// it('Add a new Ticket', function (done) {
 		
@@ -40,22 +95,5 @@ describe('Ticket Quene Test', function(){
 
 
 
-	// it('Add all Tickets to Quene', function (done) {
-		
-	// 	var content = fs.readFileSync(ticket_Quene);
-	// 	var json_data = JSON.parse(new String(content).toString());
-
-	// 	Object.keys(json_data).forEach(function (key) {
-	// 		TicketQueneRepo.add(key, json_data[key], redisClient).done(function (ok) {
-	// 			assert.equal( 'OK', ok);
-	// 		});
-	// 	});
-
-	// 	TicketQueneRepo.list(redisClient).done(function (ticket_list) {
-	// 		assert.equal( true, Object.keys(ticket_list).length > 0, "did not add any ticket to Quene");
-	// 		done();
-	// 	});
-
-	// });
 
 });

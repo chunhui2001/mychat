@@ -41,7 +41,7 @@
 					<% var seatMapSortColKey = Object.keys(seatMap[seatMapSortRowKey[i]]).sort(); %>
 
 					<% for (var j=0; j<seatMapSortColKey.length; j++) { %>	
-					<% var currentSeat = seatMap[seatMapSortColKey[i]][seatMapSortColKey[j]]; %>
+					<% var currentSeat = seatMap[seatMapSortRowKey[i]][seatMapSortColKey[j]]; %>
 					<div class="seat <%= currentSeat.status %>" 
 						data-seat-status='<%= currentSeat.status %>' 
 						data-seat-key='<%= currentSeat.seatKey %>'>
@@ -103,6 +103,29 @@ $(function (argument) {
 
 		$(document).on("click", ".s-panel .s-clear-sel", function () {
 			$(".seat-body .seat.sel").removeClass("sel");
+			$(".seat-container .s-panel").slideUp();
+		});
+
+		$(document).on("click", ".s-panel .s-confirm", function () {
+			
+			if($(".seat-body .seat.sel").length == 0) return;
+
+			var ticketKeyList = [];
+
+			$(".seat-body .seat.sel").each(function () {
+				ticketKeyList.push($(this).attr('data-seat-key'));
+			});
+
+			$.ajax({
+			  type: 'POST',
+			  url: '/cinema/<%= movieId %>/',
+			  data: { ticketKeyList: ticketKeyList },
+			  success: function (result) {
+			  	debugger;
+			  },
+			  dataType: 'JSON'
+			});
+
 		});
 
 	});
