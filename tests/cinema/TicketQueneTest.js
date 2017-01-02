@@ -47,9 +47,7 @@ describe('Ticket Quene Test', function(){
 
 	// });
 
-	it ('从票池中取出所有票，根据状态推入 待售、锁定、已售', function (done) {
-		// 从票池中取出所有票，根据状态推入 待售、锁定、已售
-		
+	it ('从票池中取出所有票，根据状态推入 待售、锁定、已售', function (done) {		
 
 		nimble.series([
 	    	function(callback) {
@@ -63,12 +61,9 @@ describe('Ticket Quene Test', function(){
 					Object.keys(ticket_list).forEach(function (ticketKey) {						
 						var ticket = JSON.parse(ticket_list[ticketKey]);
 						var theTicketKey = ticketKey + "_" + ticket.status;
-						// console.log(typeof ticket === 'object' ? JSON.stringify(ticket) : ticket, '88');
 						TicketQueneRepo.add(theTicketKey, ticket, redisClient).done(function (ok) {
-							// console.log(TicketQueneRepo.hashKey() + "#" + theTicketKey, ok);
-							// console.log(JSON.stringify(ticket), 'ticket');
+							assert.equal('OK', ok);
 						});
-						// console.log(JSON.stringify(ticket), 'ticket');
 					});
 					callback();
 				});
@@ -78,6 +73,16 @@ describe('Ticket Quene Test', function(){
 		    }
 		]);	
 
+	});
+
+
+
+	it ('listByPattern', function (done) {	
+		TicketQueneRepo.listByPattern('c62479_005_20170101_*', redisClient).done(function (ticket_list) {
+			console.log(ticket_list, 'ticket_list');
+			assert.equal(true, Object.keys(ticket_list).length >= 0);
+			done();
+		});
 	});
 	
 

@@ -66,10 +66,19 @@ TicketBaseRepository.prototype.exists = function (field_name, client) {
 }
 
 TicketBaseRepository.prototype.list = function (client) {
-
 	var _this = this;
 	return q.Promise(function (resolve, reject, notify) {
 		client.hgetall(_this.hashKey(), function (err, Object) {
+			if (err) return reject(err);
+			return resolve(Object);
+		});
+	});
+}
+
+TicketBaseRepository.prototype.listByPattern = function (key_pattern, client) {
+	var _this = this;
+	return q.Promise(function (resolve, reject, notify) {
+		client.keys(_this.hashKey() + "*", function (err, Object) {
 			if (err) return reject(err);
 			return resolve(Object);
 		});
