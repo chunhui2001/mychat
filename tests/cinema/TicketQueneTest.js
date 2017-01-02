@@ -17,7 +17,7 @@ describe('Ticket Quene Test', function(){
 
 	it('Check a Ticket Exists', function (done) {
 		
-		var key = "c62479_005_20170101_19:40_CNXJ0056301_FR1A05#04_pending";
+		var key = "c62479_005_20170101_19:40_CNXJ0056301_FR1A05#04_locked";
 
 		TicketQueneRepo.exists(key, redisClient).done(function (exists) {
 			assert.equal( true, exists, "["+key+"]: not exists!");

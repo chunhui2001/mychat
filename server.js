@@ -62,7 +62,7 @@ app.use(require('./routes/CinemaRoute')());
 
 function startServer(port) {   
 
-    var defaultPort = 3000; 
+    var defaultPort = 3001; 
     var server = null;
 
     if (port) {

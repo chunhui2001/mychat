@@ -9,6 +9,19 @@ function TicketBaseRepository () {
 }
 
 
+TicketBaseRepository.prototype.error = function (argument) {
+
+	return q.Promise(function (resolve, reject, notify) {
+		if (1==1) {
+			throw new Error("ddd");
+		}
+		
+		return resolve(val[0]!==null);
+	});
+
+	
+}
+
 TicketBaseRepository.prototype.hashKey = function () {
 	throw new Error('TicketBaseRepository#hashKey must be overridden by subclass');
 }

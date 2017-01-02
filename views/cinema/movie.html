@@ -9,7 +9,8 @@
 
 <div class="seat-wapper">
 	<div class="seat-container">
-		<div class="loading" style="display: block;">
+		<% var seatMapSortRowKey = Object.keys(seatMap).sort(); %>
+		<div class="loading" style="display: none;">
 			<canvas id="loadingCanvas" width="150" height="150" style="margin-top: -75px;"></canvas>
 		</div>
 		<div style="float:left;">
@@ -17,30 +18,11 @@
 				<div class="seat number head">
 					<span>&nbsp;</span>
 				</div>
+				<% for (var i=0; i<seatMapSortRowKey.length; i++) { %>
 				<div class="seat number">
-					<span>1</span>
+					<span><%= parseInt(seatMapSortRowKey[i]) %></	span>
 				</div>
-				<div class="seat number">
-					<span>2</span>
-				</div>
-				<div class="seat number">
-					<span>3</span>
-				</div>
-				<div class="seat number">
-					<span>4</span>
-				</div>
-				<div class="seat number">
-					<span>5</span>
-				</div>
-				<div class="seat number">
-					<span>6</span>
-				</div>
-				<div class="seat number">
-					<span>7</span>
-				</div>
-				<div class="seat number">
-					<span>8</span>
-				</div>
+				<% } %>				
 				<div class="clearFix"></div>
 			</div>
 		</div>
@@ -52,277 +34,22 @@
 				<div style="font-style: italic;font-weight: bold;color:rosybrown;margin-top: 1.5em;">中心线</div>
 			</div>
 			<div class="seat-body" >
+
+				<% for (var i=0; i<seatMapSortRowKey.length; i++) { %>				
 				<div class="s-row">
-					<div class="seat empty">
+					<% var seatMapSortColKey = Object.keys(seatMap[seatMapSortRowKey[i]]).sort(); %>
+					<% for (var j=0; j<seatMapSortColKey.length; j++) { %>	
+					<% var currentSeat = seatMap[seatMapSortColKey[i]][seatMapSortColKey[j]]; %>
+					<div class="seat <%= currentSeat.status %>" 
+						data-seat-status='<%= currentSeat.status %>' 
+						data-seat-key='<%= currentSeat.seatKey %>'>
 						
 					</div>
-					<div class="seat empty">
-						
-					</div>
-					<div class="seat empty">
-						
-					</div>
-					<div class="seat sel">
-						
-					</div>
-					<div class="seat sel">
-						
-					</div>
-					<div class="seat sel">
-						
-					</div>
-					<div class="seat saled">
-						
-					</div>
-					<div class="seat saled">
-						
-					</div>
-					<div class="seat saled">
-						
-					</div>
-					<div class="seat saled">
-						
-					</div>
+					<% } %>	
 					<div class="clearFix"></div>
 				</div>
+				<% } %>	
 			
-				<div class="s-row">
-					<div class="seat empty">
-						
-					</div>
-					<div class="seat empty">
-						
-					</div>
-					<div class="seat empty">
-						
-					</div>
-					<div class="seat sel">
-						
-					</div>
-					<div class="seat sel">
-						
-					</div>
-					<div class="seat sel">
-						
-					</div>
-					<div class="seat saled">
-						
-					</div>
-					<div class="seat saled">
-						
-					</div>
-					<div class="seat saled">
-						
-					</div>
-					<div class="seat saled">
-						
-					</div>
-					<div class="clearFix"></div>
-				</div>
-			
-				<div class="s-row">
-					<div class="seat empty">
-						
-					</div>
-					<div class="seat empty">
-						
-					</div>
-					<div class="seat empty">
-						
-					</div>
-					<div class="seat sel">
-						
-					</div>
-					<div class="seat sel">
-						
-					</div>
-					<div class="seat sel">
-						
-					</div>
-					<div class="seat saled">
-						
-					</div>
-					<div class="seat saled">
-						
-					</div>
-					<div class="seat saled">
-						
-					</div>
-					<div class="seat saled">
-						
-					</div>
-					<div class="clearFix"></div>
-				</div>
-			
-				<div class="s-row">
-					<div class="seat empty">
-						
-					</div>
-					<div class="seat empty">
-						
-					</div>
-					<div class="seat empty">
-						
-					</div>
-					<div class="seat sel">
-						
-					</div>
-					<div class="seat sel">
-						
-					</div>
-					<div class="seat sel">
-						
-					</div>
-					<div class="seat saled">
-						
-					</div>
-					<div class="seat saled">
-						
-					</div>
-					<div class="seat saled">
-						
-					</div>
-					<div class="seat saled">
-						
-					</div>
-					<div class="clearFix"></div>
-				</div>
-			
-				<div class="s-row">
-					<div class="seat empty">
-						
-					</div>
-					<div class="seat empty">
-						
-					</div>
-					<div class="seat empty">
-						
-					</div>
-					<div class="seat sel">
-						
-					</div>
-					<div class="seat sel">
-						
-					</div>
-					<div class="seat sel">
-						
-					</div>
-					<div class="seat saled">
-						
-					</div>
-					<div class="seat saled">
-						
-					</div>
-					<div class="seat saled">
-						
-					</div>
-					<div class="seat saled">
-						
-					</div>
-					<div class="clearFix"></div>
-				</div>
-			
-				<div class="s-row">
-					<div class="seat empty">
-						
-					</div>
-					<div class="seat empty">
-						
-					</div>
-					<div class="seat empty">
-						
-					</div>
-					<div class="seat sel">
-						
-					</div>
-					<div class="seat sel">
-						
-					</div>
-					<div class="seat sel">
-						
-					</div>
-					<div class="seat saled">
-						
-					</div>
-					<div class="seat saled">
-						
-					</div>
-					<div class="seat saled">
-						
-					</div>
-					<div class="seat saled">
-						
-					</div>
-					<div class="clearFix"></div>
-				</div>
-			
-				<div class="s-row">
-					<div class="seat empty">
-						
-					</div>
-					<div class="seat empty">
-						
-					</div>
-					<div class="seat empty">
-						
-					</div>
-					<div class="seat sel">
-						
-					</div>
-					<div class="seat sel">
-						
-					</div>
-					<div class="seat sel">
-						
-					</div>
-					<div class="seat saled">
-						
-					</div>
-					<div class="seat saled">
-						
-					</div>
-					<div class="seat saled">
-						
-					</div>
-					<div class="seat saled">
-						
-					</div>
-					<div class="clearFix"></div>
-				</div>
-			
-				<div class="s-row">
-					<div class="seat empty">
-						
-					</div>
-					<div class="seat empty">
-						
-					</div>
-					<div class="seat empty">
-						
-					</div>
-					<div class="seat sel">
-						
-					</div>
-					<div class="seat sel">
-						
-					</div>
-					<div class="seat sel">
-						
-					</div>
-					<div class="seat saled">
-						
-					</div>
-					<div class="seat saled">
-						
-					</div>
-					<div class="seat saled">
-						
-					</div>
-					<div class="seat saled">
-						
-					</div>
-					<div class="clearFix"></div>
-				</div>
 			</div>
 		</div>
 		
@@ -331,77 +58,14 @@
 	<div class="clearFix"></div>
 </div>
 
-<%- contentFor('style') %>
-<style type="text/css">
-.loading {
-	width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,.2);
-    position: absolute;
-    margin: -.5em;
-    /*background-image: url(/images/spinner.gif);*/
-    background-size: 50%;
-    background-repeat: no-repeat;
-    background-position: center;
-    padding-top: 150px;
-}
-	.seat-wapper {
-		text-align: center;	
-	}
-	.seat-container {
-		position: relative;
-		display: inline-block;
-		margin: auto;
-		padding: .5em;
-		border: solid 2px khaki;
-		border-radius: 4px;
-	}
-  .seat-container div.seat{
-  	width:32px;
-  	height: 32px;
-  	float: left;
-  	background-position-x: center;
-    background-position-y: center;
-    background-size: 32px 32px;
-    margin: .5em;
-    cursor: pointer;
-  }
 
-  .seat-container div.seat.empty {
-  	background-image: url(/images/seat-empty.png);
-  }
-
-  .seat-container div.seat.saled {
-  	background-image: url(/images/seat-saled.png);
-  }
-
-  .seat-container div.seat.sel {
-  	background-image: url(/images/seat-sel.png);
-  }
-  .s-row.col-number {
-  	width:40px;
-  }
-  .s-row.col-number .seat.number span{
-  	font-size: 1.7em;
-  	font-weight: bold;
-  	display: inline-block;
-  	color:gray;
-  }
-
-  .seat-body {
-  	background-image: url(/images/line-h.jpg); 
-  	background-repeat-x: no-repeat;
-    background-position-x: center;
-  }
-
-  .seat.screen, .seat.number.head {
-  	height: 65px !important;
-  }
-</style>
+<%- contentFor('stylesheet')%>
+<link type="text/css" href="/stylesheets/cinema-main.css" rel="stylesheet">
 
 
 <%- contentFor('script') %>
 <script type="text/javascript">
+
 $(function (argument) {
 	canvalLoading("loadingCanvas");
 });

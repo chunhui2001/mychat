@@ -17,7 +17,7 @@ describe('Ticket Pool Test', function(){
 	"use strict";
 
 
-	it('Generate Ticket Pool by File', function(done){
+	it('Check Ticket Pool File Exists', function(done){
 
 		// assert.equal(true, fs.existsSync(ticket_pool));
 
@@ -65,7 +65,13 @@ describe('Ticket Pool Test', function(){
 		var json_data = JSON.parse(new String(content).toString());
 
 		Object.keys(json_data).forEach(function (key) {
-			TicketPoolRepo.add(key, json_data[key], redisClient).done(function (ok) {
+
+			var all_status = ['pending', 'locked', 'saled'];
+			var ticketValue = json_data[key];
+
+			ticketValue.status = all_status[Math.floor(Math.random()*(all_status.length)+1)-1];
+
+			TicketPoolRepo.add(key, ticketValue, redisClient).done(function (ok) {
 				assert.equal( 'OK', ok);
 			});
 		});

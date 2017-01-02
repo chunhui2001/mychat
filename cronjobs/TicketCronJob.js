@@ -23,6 +23,8 @@ function ticketJob(argument) {
 
 	// 从票池中取出所有票，根据状态推入 待售、锁定、已售
 	TicketPoolRepo.list(redisClient).done(function (ticket_list) {
+
+		console.log(Object.keys(ticket_list).length, 'Cron Job: Object.keys(ticket_list)');
 		
 		Object.keys(ticket_list).forEach(function (ticketKey) {
 			

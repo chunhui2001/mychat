@@ -15,11 +15,36 @@ module.exports = {
 
 		// key: cinemaId_roomId_date_time_moveId_seatId
 
+		// TicketQueneRepo.error().done(function (argument) {
+			
+		// }, function (argument) {
+		// 	throw new Error("ddd22");
+		// });
+
+		
+
 		TicketQueneRepo.list(redisClient).done(function (ticket_list) {
-			res.render('cinema/movie', {movieId: movieId, ticketList: ticket_list == null ? {} : ticket_list});
+
+			// c62479_005_20170101_19:40_CNXJ0056301_FR1A03#04_pending
+
+			var seatMap = {};
+
+			Object.keys(ticket_list).forEach(function (key) {
+				
+				var keyArray = key.split('_');
+				var seatLetLan = keyArray[5];
+				var row = seatLetLan.substring(4,6);
+				var col = seatLetLan.substring(7,9);
+
+				if (!seatMap[row]) seatMap[row] = {};
+				if (!seatMap[row][col]) seatMap[row][col] = { seatKey:key, status: keyArray[keyArray.length-1]};
+
+			});
+
+			console.log(Object.keys(seatMap).sort(), 'seatMap');
+
+			res.render('cinema/movie', {movieId: movieId, ticketList: ticket_list == null ? {} : ticket_list, seatMap: seatMap});
 		});
-
-
 		
 	}
 }
