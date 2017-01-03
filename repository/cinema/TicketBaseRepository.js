@@ -34,8 +34,19 @@ TicketBaseRepository.prototype.add = function (ticket_key, value, client) {
 	// 2. if not exists and then add new
 	return q.Promise(function (resolve, reject, notify) {
 		var ticket = {};
-		// console.log(value, 'newTicket');
-		ticket[ticket_key] = typeof value === 'object' ? JSON.stringify(value) : value;
+		// console.log(typeof value, 'newTicket');
+		if (value instanceof Array) {
+			for (var i=0;i<value.length; i++) {
+				ticket[ticket_key[i]] = value[i];
+			}			
+		} else if (typeof value === 'object') {
+			ticket[ticket_key] = JSON.stringify(value);
+		} else if (typeof value === 'string') {
+
+		} else {
+			// TODO
+		}
+
 		client.hmset(_this.hashKey(), ticket, function (err, ok) {
 			if (err) return reject(err);
 			resolve (ok);

@@ -106,7 +106,6 @@ describe('Ticket Pool Test', function(){
 		var keys = ['c62479_005_20170101_19:40_CNXJ0056301_FR1A01#01'];
 		keys.push('c62479_005_20170101_19:40_CNXJ0056301_FR1A01#02');
 		TicketPoolRepo.listByKey(keys, redisClient).done(function(tickets) {
-			console.log(tickets, '#get list get key, tickets');
 			assert.equal(true, tickets.length == keys.length);
 			done();
 		});

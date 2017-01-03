@@ -80,7 +80,6 @@ describe('Ticket Quene Test', function(){
 
 	it ('listByPattern', function (done) {	
 		TicketQueneRepo.listByPattern('c62479_005_20170101_*', redisClient).done(function (ticket_list) {
-			console.log(ticket_list, 'ticket_list');
 			assert.equal(true, Object.keys(ticket_list).length >= 0);
 			done();
 		});

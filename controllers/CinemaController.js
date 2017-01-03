@@ -85,17 +85,36 @@ module.exports = {
 			// 2.
 			TicketPoolRepo.listByKey(ticketPoolKeyList, redisClient).done(function(tickets) {
 
-				var keys = [];
-				var values = [];
+				var keys_pool = [];
+				var values_pool = [];
 
+				// 更新状态 pending to locked
 				tickets.forEach(function(ticket) {
 					ticket = JSON.parse(ticket);
 					ticket.status= 'locked';
-					keys.push(ticket.key);
-					keys.push(ticket);
+					keys_pool.push(ticket.key);
+					values_pool.push(JSON.stringify(ticket));
 				});
 
-				// TicketPoolRepo.update(keys, values);
+				TicketPoolRepo.update(keys_pool, values_pool, redisClient).done(function (ok) {
+					console.log('ok1');
+				});
+
+
+				var keys_quene = [];
+				var values_quene = [];
+				// 
+				tickets.forEach(function(ticket) {
+					ticket = JSON.parse(ticket);
+					ticket.status = 'locked';
+					ticket.key = ticket.key + '_' + ticket.status;
+					keys_quene.push(ticket.key);
+					values_quene.push(JSON.stringify(ticket));
+				});
+
+				TicketQueneRepo.add(keys_quene, values_quene, redisClient).done(function () {
+					console.log('ok2');
+				});
 
 			});
 
