@@ -3,8 +3,13 @@
 var redis = require('redis');
 var redisClient = redis.createClient('redis://127.0.0.1:6379/9');
 
+var InvalidRequestError = require('../errors/InvalidRequestError');
+
+var TicketPoolRepository = require('../repository/cinema/TicketPoolRepository');
 var TicketQueneRepository = require('../repository/cinema/TicketQueneRepository');
+
 var TicketQueneRepo = new TicketQueneRepository();
+var TicketPoolRepo = new TicketPoolRepository();
 
 module.exports = {
 
@@ -49,16 +54,51 @@ module.exports = {
 
 	createOrder: function (req, res) {
 
-		var ticketKeyList 	= req.body.ticketKeyList || [];
+		var ticketQueneKeyList 	= req.body.ticketKeyList || [];
+		var ticketPoolKeyList = [];
 
-		if (ticketKeyList.length == 0) return res.json(0);
+		if (ticketQueneKeyList.length == 0) return res.json(0);
 
+		// validate ticket keys status is pending
 		// 1. delete ticket quene keys
 		// 2. update ticket pool status
 
+		ticketQueneKeyList.forEach(function(key) {
+			var keyArr = key.split('_');
+			if (keyArr[keyArr.length - 1] != 'pending') {
+				throw new InvalidRequestError();
+				// return next(new InvalidRequestError());
+			}
+			keyArr.pop();
+			ticketPoolKeyList.push(keyArr.join('_'));
+		});
+
 		// 1.
-		TicketQueneRepo.remove(ticketKeyList, redisClient).done(function (affectRowCount) {
+		TicketQueneRepo.remove(ticketQueneKeyList, redisClient).done(function (affectRowCount) {
+
+			// [!!!] if affectRowCount == 0 that means the tickets is locked by other users
 			res.json(affectRowCount);
+
+			if (affectRowCount != ticketQueneKeyList.length) return;
+
+
+			// 2.
+			TicketPoolRepo.listByKey(ticketPoolKeyList, redisClient).done(function(tickets) {
+
+				var keys = [];
+				var values = [];
+
+				tickets.forEach(function(ticket) {
+					ticket = JSON.parse(ticket);
+					ticket.status= 'locked';
+					keys.push(ticket.key);
+					keys.push(ticket);
+				});
+
+				// TicketPoolRepo.update(keys, values);
+
+			});
+
 		});
 
 	}

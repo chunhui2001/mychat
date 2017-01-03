@@ -61,6 +61,7 @@ describe('Ticket Quene Test', function(){
 					Object.keys(ticket_list).forEach(function (ticketKey) {						
 						var ticket = JSON.parse(ticket_list[ticketKey]);
 						var theTicketKey = ticketKey + "_" + ticket.status;
+						ticket.key = theTicketKey;
 						TicketQueneRepo.add(theTicketKey, ticket, redisClient).done(function (ok) {
 							assert.equal('OK', ok);
 						});

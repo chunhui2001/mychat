@@ -75,6 +75,16 @@ TicketBaseRepository.prototype.list = function (client) {
 	});
 }
 
+TicketBaseRepository.prototype.listByKey = function (keys, client) {
+	var _this = this;
+	return q.Promise(function (resolve, reject, notify) {
+		client.hmget(_this.hashKey(), keys, function (err, Object) {
+			if (err) return reject(err);
+			return resolve(Object);
+		});
+	});
+}
+
 TicketBaseRepository.prototype.listByPattern = function (key_pattern, client) {
 	var _this = this;
 	return q.Promise(function (resolve, reject, notify) {

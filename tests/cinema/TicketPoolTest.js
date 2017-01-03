@@ -78,6 +78,7 @@ describe('Ticket Pool Test', function(){
 					var all_status = ['pending', 'locked', 'saled'];
 					var ticketValue = json_data[key];
 					ticketValue.status = all_status[Math.floor(Math.random()*(all_status.length)+1)-1];
+					ticketValue.key = key;
 					TicketPoolRepo.add(key, ticketValue, redisClient).done(function (ok) {
 						assert.equal( 'OK', ok);
 					});
@@ -97,6 +98,18 @@ describe('Ticket Pool Test', function(){
 		    	done();
 		    }
 		]);	
+
+	});
+
+	it ('#get list get key', function(done) {
+
+		var keys = ['c62479_005_20170101_19:40_CNXJ0056301_FR1A01#01'];
+		keys.push('c62479_005_20170101_19:40_CNXJ0056301_FR1A01#02');
+		TicketPoolRepo.listByKey(keys, redisClient).done(function(tickets) {
+			console.log(tickets, '#get list get key, tickets');
+			assert.equal(true, tickets.length == keys.length);
+			done();
+		});
 
 	});
 

@@ -117,13 +117,16 @@ $(function (argument) {
 			});
 
 			$.ajax({
-			  type: 'POST',
-			  url: '/cinema/<%= movieId %>/',
-			  data: { ticketKeyList: ticketKeyList },
-			  success: function (result) {
-			  	debugger;
-			  },
-			  dataType: 'JSON'
+				type: 'POST',
+				url: '/cinema/<%= movieId %>/',
+				data: { ticketKeyList: ticketKeyList },
+				success: function (result) {
+					debugger;
+				},
+				error: function(response, error) {
+					debugger;
+				},
+				dataType: 'JSON'
 			});
 
 		});

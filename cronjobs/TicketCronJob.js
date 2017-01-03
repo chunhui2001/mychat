@@ -30,15 +30,10 @@ function ticketJob(argument) {
 			
 			var ticket = JSON.parse(ticket_list[ticketKey]);
 			var theTicketKey = ticketKey + "_" + ticket.status;
-
-			// console.log(typeof ticket === 'object' ? JSON.stringify(ticket) : ticket, '88');
-
+			ticket.key = theTicketKey;
 			TicketQueneRepo.add(theTicketKey, ticket, redisClient).done(function (ok) {
-				// console.log(TicketQueneRepo.hashKey() + "#" + theTicketKey, ok);
-				// console.log(JSON.stringify(ticket), 'ticket');
+				
 			});
-
-			// console.log(JSON.stringify(ticket), 'ticket');
 
 		});
 	});
