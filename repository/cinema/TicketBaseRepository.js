@@ -42,9 +42,9 @@ TicketBaseRepository.prototype.add = function (ticket_key, value, client) {
 		} else if (typeof value === 'object') {
 			ticket[ticket_key] = JSON.stringify(value);
 		} else if (typeof value === 'string') {
-
+			ticket[ticket_key] = value;
 		} else {
-			// TODO
+			// TODO.
 		}
 
 		client.hmset(_this.hashKey(), ticket, function (err, ok) {

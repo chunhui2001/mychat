@@ -60,6 +60,19 @@ app.use(require('./routes/CinemaRoute')());
 
 
 
+app.use(function (req, res, next) {
+    res.status(404);
+    res.type('text/plain');
+    next(new NotFoundError("404"));
+});
+
+app.use(require('./errors/ErrorsHandle'));
+
+
+
+
+
+
 function startServer(port) {   
 
     var defaultPort = 3001; 
@@ -82,14 +95,6 @@ function startServer(port) {
     require('./socketio/sio')(server, sessionMiddleware);
 }
 
-app.use(function (req, res, next) {
-    res.status(404);
-    res.type('text/plain');
-    next(new NotFoundError("404"));
-});
-
-
-app.use(require('./errors/ErrorsHandle'));
 
 
 if (require.main == module) {

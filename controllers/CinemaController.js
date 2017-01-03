@@ -1,5 +1,6 @@
 "use strict";
 
+var moment = require('moment');
 var redis = require('redis');
 var redisClient = redis.createClient('redis://127.0.0.1:6379/9');
 
@@ -65,10 +66,9 @@ module.exports = {
 
 		ticketQueneKeyList.forEach(function(key) {
 			var keyArr = key.split('_');
-			if (keyArr[keyArr.length - 1] != 'pending') {
+			if (keyArr[keyArr.length - 1] != 'pending') 
 				throw new InvalidRequestError();
-				// return next(new InvalidRequestError());
-			}
+
 			keyArr.pop();
 			ticketPoolKeyList.push(keyArr.join('_'));
 		});
@@ -77,7 +77,19 @@ module.exports = {
 		TicketQueneRepo.remove(ticketQueneKeyList, redisClient).done(function (affectRowCount) {
 
 			// [!!!] if affectRowCount == 0 that means the tickets is locked by other users
-			res.json(affectRowCount);
+			if (req.sendResult) {
+				if (affectRowCount == ticketQueneKeyList.length) {
+					req.sendResult.data = ticketQueneKeyList;
+					req.sendResult.message = ticketQueneKeyList.map(
+						function (key) { var keyarr = key.split('_'); keyarr.pop(); return keyarr.join('_') + '_locked'; }).join(',') + ' are locked';
+				} else {
+					req.sendResult.error = true;
+					req.sendResult.message = 'failed';
+				}
+				
+				res.json(req.sendResult);
+			}
+			
 
 			if (affectRowCount != ticketQueneKeyList.length) return;
 
@@ -92,12 +104,15 @@ module.exports = {
 				tickets.forEach(function(ticket) {
 					ticket = JSON.parse(ticket);
 					ticket.status= 'locked';
+					ticket.expiredAt = parseInt(moment().add(25, 'minutes').format('x'));
 					keys_pool.push(ticket.key);
 					values_pool.push(JSON.stringify(ticket));
 				});
 
 				TicketPoolRepo.update(keys_pool, values_pool, redisClient).done(function (ok) {
-					console.log('ok1');
+					// 将状态变化广播出去
+					// TODO.
+
 				});
 
 
@@ -111,6 +126,9 @@ module.exports = {
 					keys_quene.push(ticket.key);
 					values_quene.push(JSON.stringify(ticket));
 				});
+
+				// var unixTimespan = parseInt(moment().add(25, 'minutes').format('x'));
+				// console.log(moment(unixTimespan).format('YYYY-MM-DD HH:mm:ss.SSS'), 'unixTimespan');
 
 				TicketQueneRepo.add(keys_quene, values_quene, redisClient).done(function () {
 					console.log('ok2');

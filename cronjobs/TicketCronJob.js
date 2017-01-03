@@ -31,6 +31,12 @@ function ticketJob(argument) {
 			var ticket = JSON.parse(ticket_list[ticketKey]);
 			var theTicketKey = ticketKey + "_" + ticket.status;
 			ticket.key = theTicketKey;
+
+			// 如果当前票的状态是locked, 查看当前票的过期时间
+			// 如果当前票的过期时间 <= 当前时间, 则更新当前票的状态: change locked to pending
+			// 并将状态变化广播出去
+			// TODO.
+
 			TicketQueneRepo.add(theTicketKey, ticket, redisClient).done(function (ok) {
 				
 			});
