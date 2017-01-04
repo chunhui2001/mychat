@@ -113,7 +113,7 @@ module.exports = {
 					// 将状态变化广播出去
 					var message = {
 						to: res.locals.socketTicket,
-						content: keys_pool.join(',') + " updated, event1"
+						content: values_pool.map(function (ticket) { return { key: JSON.parse(ticket).key, status: JSON.parse(ticket).status}; })
 					};
 
 					redisClientSocket.publish('ticket_event', JSON.stringify(message));
