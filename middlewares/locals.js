@@ -1,4 +1,6 @@
 
+var cookie = require('cookie');
+var cookieSignature = require('cookie-signature');
 var ObjectId    = require('bson-objectid');
 
 module.exports = function (req, res, next) {
@@ -6,6 +8,18 @@ module.exports = function (req, res, next) {
 
 	res.locals.isAuthenticated = req.isAuthenticated();
     res.locals.socketTicket = ObjectId.generate(); 
+
+    if (req.headers.cookie) {
+        var the_cookie = cookie.parse(req.headers.cookie)['kzhang'];
+        if (the_cookie && the_cookie.substr(0, 2) === 's:') {  
+            var sessionId = cookieSignature.unsign(the_cookie.slice(2), 'keyboard cat');                
+            if (sessionId !== false) res.locals.sessionId = sessionId;
+        }  
+    }
+
+    if (!res.locals.sessionId) {
+        res.locals.sessionId = res.locals.socketTicket;
+    } else res.locals.socketTicket = res.locals.sessionId;
 
     var req_headers = req['headers'];
 
@@ -26,3 +40,5 @@ module.exports = function (req, res, next) {
 
     next();
 }
+
+

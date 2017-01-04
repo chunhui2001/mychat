@@ -1,11 +1,7 @@
 
-var    sio = require('socket.io');
-var   sio_redis = require('socket.io-redis');
-
-var redis = require('redis');
-
-
-var redisClient = redis.createClient('redis://127.0.0.1:6379');
+var sio = require('socket.io');
+var sio_redis = require('socket.io-redis');
+var redisClientSocket = require('redis').createClient('redis://127.0.0.1:6379/8');
 
 var UserRepo = require('../repository/user-repository');
 
@@ -16,8 +12,24 @@ module.exports = function (server, sessionMiddleware) {
 
     io.adapter(sio_redis({ host: 'localhost', port: 6379 }));
 
+    redisClientSocket.subscribe('ticket_event');
+
     io.use(function (socket, next) {
         sessionMiddleware(socket.request, socket.request.res, next);
+    });
+
+    redisClientSocket.on('message', function (channel, message) {
+        if (channel !== 'ticket_event') return;
+
+        var msg = JSON.parse(message);
+
+        if (msg.to) {
+            io.sockets.emit('new message ' + msg.to, msg);
+            delete msg.to;
+        }
+
+        io.sockets.emit('new message', msg);
+
     });
 
     process.on('message', function(message, connection) {
@@ -29,9 +41,6 @@ module.exports = function (server, sessionMiddleware) {
     
     // write business code here
     io.sockets.on('connection', function (socket) {
-
-        console.log(socket.request.session, 'socket.request.session');
-        console.log(socket.request.session.passport && socket.request.session.passport.user || null, 'socket.request.session.user');
 
         socket.on('set username', function(data, callback) {
 

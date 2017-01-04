@@ -4,6 +4,7 @@ var logger  = require('morgan');
 var cookieParser    = require('cookie-parser');
 var bodyParser      = require('body-parser');
 var passport        = require('passport');
+var onFinished = require('on-finished');
 
 var fs = require('fs');
 var ejs             = require('ejs');
@@ -45,6 +46,8 @@ var sessionMiddleware   = require('./middlewares/session.js');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
+app.use(require('compression')());
+app.use(require('response-time')());
 app.use(cookieParser());
 app.use(ejsLayouts);
 
@@ -54,6 +57,12 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(require('./middlewares/locals.js'));
 
+app.use(function (req, res, next) {
+    onFinished(res, function (err) {
+        console.log("[%s] finished request", req.connection.remoteAddress);
+    });
+    next();
+});
 
 app.use(require('./routes/GlobalRoute')());
 app.use(require('./routes/CinemaRoute')());
@@ -66,7 +75,10 @@ app.use(function (req, res, next) {
     next(new NotFoundError("404"));
 });
 
+
+
 app.use(require('./errors/ErrorsHandle'));
+
 
 
 

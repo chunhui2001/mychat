@@ -80,6 +80,15 @@ $(function (argument) {
 	jQuery(function ($) {
 
 		var socket = io.connect();
+    	var socketTicket = '<%= socketTicket %>';
+
+		socket.on('new message', function(data) {
+			debugger;
+		});
+
+		socket.on('new message ' + socketTicket, function(data) {
+			debugger;
+		});
 
 		$(document).on("click", ".seat-body .s-row .seat", function () {
 

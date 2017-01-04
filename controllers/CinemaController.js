@@ -3,6 +3,7 @@
 var moment = require('moment');
 var redis = require('redis');
 var redisClient = redis.createClient('redis://127.0.0.1:6379/9');
+var redisClientSocket = redis.createClient('redis://127.0.0.1:6379/8');
 
 var InvalidRequestError = require('../errors/InvalidRequestError');
 
@@ -24,10 +25,8 @@ module.exports = {
 		// TicketQueneRepo.error().done(function (argument) {
 			
 		// }, function (argument) {
-		// 	throw new Error("ddd22");
+			// throw new Error("ddd22");
 		// });
-
-		
 
 		TicketQueneRepo.list(redisClient).done(function (ticket_list) {
 
@@ -110,9 +109,14 @@ module.exports = {
 				});
 
 				TicketPoolRepo.update(keys_pool, values_pool, redisClient).done(function (ok) {
-					// 将状态变化广播出去
 					// TODO.
+					// 将状态变化广播出去
+					var message = {
+						to: res.locals.socketTicket,
+						content: keys_pool.join(',') + " updated, event1"
+					};
 
+					redisClientSocket.publish('ticket_event', JSON.stringify(message));
 				});
 
 

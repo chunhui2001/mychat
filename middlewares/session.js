@@ -9,6 +9,8 @@ module.exports = expressSession({
 	genid: function(req) {
 		return ObjectId.generate() 
 	},
+	// key: 'kzhang',
+	name: 'kzhang',
 	secret: 'keyboard cat',
 	resave: false,
 	saveUninitialized:false,
