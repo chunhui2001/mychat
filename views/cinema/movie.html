@@ -83,11 +83,25 @@ $(function (argument) {
     	var socketTicket = '<%= socketTicket %>';
 
 		socket.on('new message', function(data) {
-			debugger;
+			//debugger;
+			// {
+			// 	key:"c62479_005_20170101_19:40_CNXJ0056301_FR1A02#07",
+			// 	status:"locked"
+			// }
+			if (!(data && data.content)) return;
+
+			data.content.forEach(function (item) {
+				var t = $("div[data-seat-key^='" + item.key + "']");
+				$(t).attr('data-seat-key', item.key + '_' + item.status);
+				$(t).removeClass('sel').removeClass('pending').removeClass('locked');
+				$(t).addClass(item.status);
+				$(t).hide().fadeIn(300);
+			});
+
 		});
 
 		socket.on('new message ' + socketTicket, function(data) {
-			debugger;
+			//debugger;
 		});
 
 		$(document).on("click", ".seat-body .s-row .seat", function () {
@@ -130,7 +144,7 @@ $(function (argument) {
 				url: '/cinema/<%= movieId %>/',
 				data: { ticketKeyList: ticketKeyList },
 				success: function (result) {
-					debugger;
+					//debugger;
 				},
 				error: function(response, error) {
 					debugger;

@@ -116,6 +116,8 @@ module.exports = {
 						content: values_pool.map(function (ticket) { return { key: JSON.parse(ticket).key, status: JSON.parse(ticket).status}; })
 					};
 
+					// 在多进程环境下会发送多次, 考虑切换到 RabbitMQ
+					// TODO. 
 					redisClientSocket.publish('ticket_event', JSON.stringify(message));
 				});
 
