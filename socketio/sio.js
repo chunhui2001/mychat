@@ -22,13 +22,13 @@ module.exports = function (server, sessionMiddleware) {
         if (channel !== 'ticket_event') return;
 
         var msg = JSON.parse(message);
-        console.log(1);
+
         if (msg.to) {
-            io.sockets.emit('new message ' + msg.to, msg);
+            io.sockets.emit('ticket_status_change_' + msg.to, msg);
             delete msg.to;
         }
 
-        io.sockets.emit('new message', msg);
+        io.sockets.emit('ticket_status_change', msg);
 
     });
 
