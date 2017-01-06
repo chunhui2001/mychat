@@ -58,6 +58,11 @@ $ sudo vi /etc/haproxy/haproxy.cfg
 
 
 
+# RabbitMQ
+# http://blog.csdn.net/anzhsoft/article/details/19563091
+
+
+
 
 
 

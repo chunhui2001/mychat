@@ -65,7 +65,7 @@
 
   .seat-body {
   	background-image: url(/images/line-h.jpg); 
-  	background-repeat-x: no-repeat;
+  	background-repeat: repeat-y;;
     background-position-x: center;
   }
 

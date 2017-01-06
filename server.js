@@ -21,11 +21,11 @@ var environment = process.env.ENV || 'dev';
 var app = new express();
 
 if (environment != 'production') {
-    console.log(`   !! The sc-hot-reboot plugin is watching for code changes in the ${__dirname} directory`);
-    scHotReboot.attach(null, {
-      cwd: __dirname,
-      ignored: ['public', 'views', 'node_modules', 'README.md', '.gitignore', /[\/\\]\./]
-    });
+    // console.log(`   !! The sc-hot-reboot plugin is watching for code changes in the ${__dirname} directory`);
+    // scHotReboot.attach(null, {
+    //   cwd: __dirname,
+    //   ignored: ['public', 'views', 'node_modules', 'README.md', '.gitignore', /[\/\\]\./]
+    // });
 
     app.use(logger('dev'));
 }
@@ -85,18 +85,18 @@ app.use(require('./errors/ErrorsHandle'));
 
 
 
-function startServer(port) {   
+function startServer(port, instance) {   
 
-    var defaultPort = 3001; 
+    var defaultPort = port || 3001; 
     var server = null;
 
-    if (port) {
+    if (!instance) {
         server = app.listen(0, 'localhost', function (argument) {
             console.log(`Your server in running on ${port || defaultPort}, ` + app.get('env'));
         });
     }
 
-    if (!port) {
+    if (instance) {
 
         server = http.createServer(app);
         server.listen(defaultPort, function() {
@@ -110,7 +110,12 @@ function startServer(port) {
 
 
 if (require.main == module) {
-    startServer();
+
+    var args = process.argv.slice(2);
+    var number = args[0];
+    var port = number ? 300+number : 3001;
+
+    startServer(port, true);
 } else {
     module.exports = startServer;
 }

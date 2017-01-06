@@ -95,7 +95,7 @@ $(function (argument) {
 				$(t).attr('data-seat-key', item.key + '_' + item.status);
 				$(t).removeClass('sel').removeClass('pending').removeClass('locked');
 				$(t).addClass(item.status);
-				$(t).hide().fadeIn(300);
+				$(t).fadeTo(300,0.1).fadeIn(300).fadeTo(1000,1);
 			});
 
 		});
