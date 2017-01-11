@@ -1,10 +1,13 @@
 
 var sio = require('socket.io');
+var amqp = require('amqplib');
 var sio_redis = require('socket.io-redis');
 var redisClientSocket = require('redis').createClient('redis://127.0.0.1:6379/8');
+var amqpClient = amqp.connect('amqp://localhost');
 
 var UserRepo = require('../repository/user-repository');
 
+var queue = 'ticket_event';
 
 module.exports = function (server, sessionMiddleware) {
 
@@ -12,25 +15,50 @@ module.exports = function (server, sessionMiddleware) {
 
     io.adapter(sio_redis({ host: 'localhost', port: 6379 }));
 
-    redisClientSocket.subscribe('ticket_event');
-
     io.use(function (socket, next) {
         sessionMiddleware(socket.request, socket.request.res, next);
     });
 
-    redisClientSocket.on('message', function (channel, message) {
-        if (channel !== 'ticket_event') return;
+    // redisClientSocket.subscribe(queue);
 
-        var msg = JSON.parse(message);
+    // redisClientSocket.on('message', function (channel, message) {
 
-        if (msg.to) {
-            io.sockets.emit('ticket_status_change_' + msg.to, msg);
-            delete msg.to;
-        }
+    //     if (channel !== queue) return;
 
-        io.sockets.emit('ticket_status_change', msg);
+    //     var msg = JSON.parse(message);
 
-    });
+    //     if (msg.to) {
+    //         io.sockets.emit('ticket_status_change_' + msg.to, msg);
+    //         delete msg.to;
+    //     }
+
+    //     io.sockets.emit('ticket_status_change', msg);
+
+    // });
+
+    // Consumer
+    amqpClient.then(function(conn) {
+      return conn.createChannel();
+    }).then(function(ch) {
+      return ch.assertQueue(queue).then(function(ok) {
+        return ch.consume(queue, function(message) {
+          if (message !== null) {
+            console.log(message.content.toString(), 'receive a message');
+            ch.ack(message);
+
+            var msg = JSON.parse(message.content.toString());
+
+            if (msg.to) {
+                io.sockets.emit('ticket_status_change_' + msg.to, msg);
+                delete msg.to;
+            }
+
+            io.sockets.emit('ticket_status_change', msg);
+          }
+        });
+      });
+    }).catch(console.warn);
+
 
     process.on('message', function(message, connection) {
         if (message !== 'sticky-session:connection')
