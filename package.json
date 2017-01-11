@@ -36,6 +36,7 @@
     "serve-favicon": "^2.3.2",
     "socket.io": "^1.7.2",
     "socket.io-redis": "^2.0.1",
+    "ssl": "^1.0.0",
     "underscore": "^1.8.3"
   },
   "devDependencies": {
