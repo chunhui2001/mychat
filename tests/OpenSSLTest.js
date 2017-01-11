@@ -4,12 +4,11 @@ var assert = require('assert');
 var pem = require('pem');
 var crypto = require("crypto");
 
-describe('', function() {
+describe('OpenSSL Encrypt Testing', function() {
 
 	it ('generate certificate files', function(done) {
 				
 		pem.createCertificate({days:1, selfSigned:true}, function(err, keys) {
-			console.log(typeof keys.serviceKey, 'typeof keys.serviceKey');
 			assert.equal(true, typeof keys.serviceKey != 'undefined' && typeof keys.certificate != 'undefined', 'failed to generate certificate files!');
 			done();
 		});
