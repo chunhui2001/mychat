@@ -2,8 +2,10 @@
 
 var moment = require('moment');
 var redis = require('redis');
+var amqp = require('amqplib');
 var redisClient = redis.createClient('redis://127.0.0.1:6379/9');
 var redisClientSocket = redis.createClient('redis://127.0.0.1:6379/8');
+var amqpClient = amqp.connect('amqp://localhost');
 
 var InvalidRequestError = require('../errors/InvalidRequestError');
 
@@ -116,11 +118,22 @@ module.exports = {
 						content: values_pool.map(function (ticket) { return { key: JSON.parse(ticket).key, status: JSON.parse(ticket).status}; })
 					};
 
-					console.log(1, 'ticket_event');
+
+					var queue = 'ticket_event';
 
 					// 在多进程环境下会发送多次, 考虑切换到 RabbitMQ
 					// TODO. 
-					redisClientSocket.publish('ticket_event', JSON.stringify(message));
+					// redisClientSocket.publish(queue, JSON.stringify(message));
+
+					// Publisher
+					amqpClient.then(function(conn) {
+					  return conn.createChannel();
+					}).then(function(ch) {
+					  return ch.assertQueue(queue).then(function(ok) {
+					    return ch.sendToQueue(queue, new Buffer(JSON.stringify(message)));
+					  });
+					}).catch(console.warn);
+
 				});
 
 
@@ -139,7 +152,7 @@ module.exports = {
 				// console.log(moment(unixTimespan).format('YYYY-MM-DD HH:mm:ss.SSS'), 'unixTimespan');
 
 				TicketQueneRepo.add(keys_quene, values_quene, redisClient).done(function () {
-					console.log('ok2');
+					console.log('update ticket queue successful~');
 				});
 
 			});

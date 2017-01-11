@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "amqplib": "^0.5.1",
     "body-parser": "^1.15.2",
     "bson-objectid": "^1.1.4",
     "cluster": "^0.7.7",
