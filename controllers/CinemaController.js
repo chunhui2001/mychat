@@ -110,6 +110,8 @@ module.exports = {
 					values_pool.push(JSON.stringify(ticket));
 				});
 
+				console.log(values_pool, 'values_pool');
+
 				TicketPoolRepo.update(keys_pool, values_pool, redisClient).done(function (ok) {
 					// TODO.
 					// 将状态变化广播出去
