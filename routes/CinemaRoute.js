@@ -17,7 +17,7 @@ module.exports = function (argument) {
 
 
 	CinemaRoute.route('/cinema/:movieId')
-		.get(authController.ensureAuthenticated, cinemaController.detail);
+		.get(cinemaController.detail);
 
 
 	CinemaRoute.route('/cinema/:movieId')

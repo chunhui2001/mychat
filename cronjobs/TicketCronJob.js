@@ -52,7 +52,8 @@ function ticketJob(argument) {
 			});
 
 			TicketQueneRepo.add(theTicketKey, ticket, redisClient).done(function (ok) {
-				
+				// TODO.
+				// 将状态变化广播出去
 			});
 
 		});

@@ -97,6 +97,7 @@ TicketBaseRepository.prototype.listByKey = function (keys, client) {
 }
 
 TicketBaseRepository.prototype.listByPattern = function (key_pattern, client) {
+	// TODO.
 	var _this = this;
 	return q.Promise(function (resolve, reject, notify) {
 		client.keys(_this.hashKey() + "*", function (err, Object) {

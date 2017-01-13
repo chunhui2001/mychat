@@ -110,23 +110,20 @@ module.exports = {
 					values_pool.push(JSON.stringify(ticket));
 				});
 
-				console.log(values_pool, 'values_pool');
-
 				TicketPoolRepo.update(keys_pool, values_pool, redisClient).done(function (ok) {
-					// TODO.
+
 					// 将状态变化广播出去
 					var message = {
 						to: res.locals.socketTicket,
 						content: values_pool.map(function (ticket) { return { key: JSON.parse(ticket).key, status: JSON.parse(ticket).status}; })
 					};
 
-
 					var queue = 'ticket_event';
 
 					// 在多进程环境下会发送多次, 考虑切换到 RabbitMQ
-					// TODO. 
 					// redisClientSocket.publish(queue, JSON.stringify(message));
 
+					// RabbitMQ
 					// Publisher
 					amqpClient.then(function(conn) {
 					  return conn.createChannel();

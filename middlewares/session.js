@@ -14,6 +14,6 @@ module.exports = expressSession({
 	secret: 'keyboard cat',
 	resave: false,
 	saveUninitialized:false,
-	cookie: { maxAge: 60 * 1000 * 20 },
+	cookie: { maxAge: 60 * 1000 * 200 },
 	store: new RedisStore({client: redis.createClient('redis://127.0.0.1:6379')})
 });
