@@ -48,7 +48,8 @@ function ticketJob(argument) {
 			});
 
 			TicketQueneRepo.remove(keysShouldBeDeleted, redisClient).done(function (affectRowCount) {
-				console.log(keysShouldBeDeleted, 'keysShouldBeDeleted[' + affectRowCount + ']');
+				if (keysShouldBeDeleted > 0)
+					console.log(keysShouldBeDeleted, 'keysShouldBeDeleted[' + affectRowCount + ']');
 			});
 
 			TicketQueneRepo.add(theTicketKey, ticket, redisClient).done(function (ok) {
