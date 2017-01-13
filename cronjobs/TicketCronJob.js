@@ -34,22 +34,22 @@ function ticketJob(argument) {
 			if (ticket.status === 'locked') {
 				if (ticket.expiredAt === null || ticket.expiredAt === '' || moment().format('x') > ticket.expiredAt) {
 					// the ticket is expired
-					ticket.status = 'pending';	
-
-					// TODO.
-					// should be update TicketPool ticket status to pending				
+					ticket.status = 'pending';		
 				} 
 			}
 
 			var theTicketKey = ticketKey + "_" + ticket.status;
 			ticket.key = theTicketKey;
 
-			// ['pending', 'locked', 'saled']
+			var keysShouldBeDeleted = ['pending', 'locked', 'saled'].filter(function (status) {
+				return status !== ticket.status && status != 'saled';
+			}).map(function (status) {
+				if (status !== ticket.status) return ticketKey + "_" + status;
+			});
 
-			// TODO.
-			// should be delete ticket first 
-			// c62479_005_20170101_19:40_CNXJ0056301_FR1A01#04_locked
-			// c62479_005_20170101_19:40_CNXJ0056301_FR1A01#04_locked
+			TicketQueneRepo.remove(keysShouldBeDeleted, redisClient).done(function (affectRowCount) {
+				console.log(keysShouldBeDeleted, 'keysShouldBeDeleted[' + affectRowCount + ']');
+			});
 
 			TicketQueneRepo.add(theTicketKey, ticket, redisClient).done(function (ok) {
 				
