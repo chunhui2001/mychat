@@ -64,6 +64,10 @@ $ sudo vi /etc/haproxy/haproxy.cfg
 > http://www.rabbitmq.com/devtools.html
 
 
+# Redis Cluster
+> https://www.digitalocean.com/community/tutorials/how-to-configure-a-redis-cluster-on-centos-7
+
+
 
 
 
