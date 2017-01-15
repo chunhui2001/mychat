@@ -4,6 +4,7 @@ var redis = require('redis');
 var expressSession  = require('express-session');
 var RedisStore      = require('connect-redis')(expressSession);
 var ObjectId    	= require('bson-objectid');
+var redisClient = require('../providers/RedisProvider')['REDIS_SESSION_CLIENT'];
 
 module.exports = expressSession({
 	genid: function(req) {
@@ -15,5 +16,5 @@ module.exports = expressSession({
 	resave: false,
 	saveUninitialized:false,
 	cookie: { maxAge: 60 * 1000 * 200 },
-	store: new RedisStore({client: redis.createClient('redis://127.0.0.1:6379')})
+	store: new RedisStore({client: redisClient})
 });

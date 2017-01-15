@@ -1,11 +1,11 @@
 "use strict";
 
 var moment = require('moment');
-var redis = require('redis');
-var amqp = require('amqplib');
-var redisClient = redis.createClient('redis://127.0.0.1:6379/9');
-var redisClientSocket = redis.createClient('redis://127.0.0.1:6379/8');
-var amqpClient = amqp.connect('amqp://localhost');
+
+var redisClient = require('../providers/RedisProvider')['REDIS_CINEMA_CLIENT'];
+var _AMQP_PROVIDER = require('../providers/AmqpProvider');
+var amqpClient = _AMQP_PROVIDER['AMQP_CLIENT'];
+var _TICKET_EVENT_QUEUE = _AMQP_PROVIDER['queues']['ticket_event'];
 
 var InvalidRequestError = require('../errors/InvalidRequestError');
 
@@ -118,10 +118,7 @@ module.exports = {
 						content: values_pool.map(function (ticket) { return { key: JSON.parse(ticket).key, status: JSON.parse(ticket).status}; })
 					};
 
-					var queue = 'ticket_event';
-
-					// 在多进程环境下会发送多次, 考虑切换到 RabbitMQ
-					// redisClientSocket.publish(queue, JSON.stringify(message));
+					var queue = _TICKET_EVENT_QUEUE;
 
 					// RabbitMQ
 					// Publisher

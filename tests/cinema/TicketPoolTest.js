@@ -5,7 +5,7 @@ var fs = require('fs');
 var redis = require('redis');
 var nimble = require('nimble');
 
-var redisClient = redis.createClient('redis://127.0.0.1:6379/9');
+var redisClient = require('../../providers/RedisProvider')['REDIS_CINEMA_CLIENT'];
 
 var ticket_pool = path.join(__dirname, '../../repository/cinema/ticket_pool.json');
 

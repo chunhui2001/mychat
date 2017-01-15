@@ -3,10 +3,10 @@
 // https://github.com/squaremo/amqp.node
 // http://localhost:15672/#/
 
-var amqp = require('amqplib');
-var amqpClient = amqp.connect('amqp://localhost');
+var _AMQP_PROVIDER = require('../providers/AmqpProvider');
 
-var queue = 'tasks2';
+var amqpClient = _AMQP_PROVIDER['AMQP_CLIENT'];
+var queue = _AMQP_PROVIDER['queues']['test_quene'];
 
 
 // Publisher

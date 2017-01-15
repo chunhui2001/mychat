@@ -1,8 +1,7 @@
 var CronJob = require('cron').CronJob;
 var moment = require('moment');
-var redis = require('redis');
 
-var redisClient = redis.createClient('redis://127.0.0.1:6379/9');
+var redisClient = require('../providers/RedisProvider')['REDIS_CINEMA_CLIENT'];
 
 var TicketPoolRepository = require('../repository/cinema/TicketPoolRepository');
 var TicketQueneRepository = require('../repository/cinema/TicketQueneRepository');

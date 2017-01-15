@@ -1,40 +1,27 @@
 
 var sio = require('socket.io');
-var amqp = require('amqplib');
 var sio_redis = require('socket.io-redis');
-var redisClientSocket = require('redis').createClient('redis://127.0.0.1:6379/8');
-var amqpClient = amqp.connect('amqp://localhost');
+
+
+var redisProvider = require('../providers/RedisProvider');
+
+var _AMQP_PROVIDER = require('../providers/AmqpProvider');
+var _TICKET_EVENT_QUEUE = _AMQP_PROVIDER['queues']['ticket_event'];
+var amqpClient = _AMQP_PROVIDER['AMQP_CLIENT'];
 
 var UserRepo = require('../repository/user-repository');
 
-var queue = 'ticket_event';
+var queue = _TICKET_EVENT_QUEUE;
 
 module.exports = function (server, sessionMiddleware) {
 
     var    io = sio(server); 
 
-    io.adapter(sio_redis({ host: 'localhost', port: 6379 }));
+    io.adapter(sio_redis({ host: redisProvider['REDIS_HOST'], port: redisProvider['REDIS_PORT'] }));
 
     io.use(function (socket, next) {
         sessionMiddleware(socket.request, socket.request.res, next);
     });
-
-    // redisClientSocket.subscribe(queue);
-
-    // redisClientSocket.on('message', function (channel, message) {
-
-    //     if (channel !== queue) return;
-
-    //     var msg = JSON.parse(message);
-
-    //     if (msg.to) {
-    //         io.sockets.emit('ticket_status_change_' + msg.to, msg);
-    //         delete msg.to;
-    //     }
-
-    //     io.sockets.emit('ticket_status_change', msg);
-
-    // });
 
     // Consumer
     amqpClient.then(function(conn) {

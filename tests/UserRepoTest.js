@@ -4,7 +4,7 @@ var assert = require('assert'),
 
 
 var redis = require('redis');
-var client = redis.createClient('redis://127.0.0.1:6379');
+var client = require('../providers/RedisProvider')['REDIS_BASE_CLIENT'];
 
 var ObjectId  = require('bson-objectid');
 
