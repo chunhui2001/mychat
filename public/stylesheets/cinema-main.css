@@ -67,6 +67,7 @@
   	background-image: url(/images/line-h.jpg); 
   	background-repeat: repeat-y;;
     background-position-x: center;
+    background-position: center;
   }
 
   .seat.screen, .seat.number.head {
