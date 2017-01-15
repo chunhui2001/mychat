@@ -79,6 +79,9 @@ describe('Ticket Pool Test', function(){
 					var ticketValue = json_data[key];
 					ticketValue.status = all_status[Math.floor(Math.random()*(all_status.length)+1)-1];
 					ticketValue.key = key;
+					if (ticketValue.status === 'locked') {
+						ticketValue.expiredAt = parseInt(moment().add(25, 'minutes').format('x'));
+					}
 					TicketPoolRepo.add(key, ticketValue, redisClient).done(function (ok) {
 						assert.equal( 'OK', ok);
 					});

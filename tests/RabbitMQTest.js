@@ -25,7 +25,7 @@ amqpClient.then(function(conn) {
   return ch.assertQueue(queue).then(function(ok) {
     return ch.consume(queue, function(msg) {
       if (msg !== null) {
-        console.log(msg.content.toString(), 'receive a message');
+        // console.log(msg.content.toString(), 'receive a message');
         ch.ack(msg);
       }
     });

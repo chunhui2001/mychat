@@ -65,6 +65,8 @@ $ sudo vi /etc/haproxy/haproxy.cfg
 
 
 # Redis Cluster
+> http://sharadchhetri.com/2014/10/04/install-redis-server-centos-7-rhel-7/
+> http://linoxide.com/storage/install-redis-server-centos-7/
 > https://www.digitalocean.com/community/tutorials/how-to-configure-a-redis-cluster-on-centos-7
 
 

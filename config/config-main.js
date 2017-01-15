@@ -19,7 +19,7 @@ module.exports = {
     	redis: {
     		HOST: '127.0.0.1',
     		PORT: 6379,
-    		REDIS_URI: "redis://127.0.0.1:6379",
+    		REDIS_URI: "redis://192.168.0.102:6379",
     		REDIS_OPTIONS: null,
     		DB_NUMBERS: {
     			CINEMA_TICKET_NUMBER: 9 	// cinema ticket number
