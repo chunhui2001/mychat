@@ -5,6 +5,7 @@ var redisClient = require('../providers/RedisProvider')['REDIS_CINEMA_CLIENT'];
 
 var TicketPoolRepository = require('../repository/cinema/TicketPoolRepository');
 var TicketQueneRepository = require('../repository/cinema/TicketQueneRepository');
+var AmqpRespository = require('../repository/AmqpRespository');
 
 
 var TicketPoolRepo = new TicketPoolRepository();
@@ -51,9 +52,11 @@ function ticketJob(argument) {
 					console.log(keysShouldBeDeleted, 'keysShouldBeDeleted[' + affectRowCount + ']');
 			});
 
+
 			TicketQueneRepo.add(theTicketKey, ticket, redisClient).done(function (ok) {
-				// TODO.
 				// 将状态变化广播出去
+				// TODO. 如果状态没有变化则不广播
+				AmqpRespository.publish( null, [{ key: ticket.key, status: ticket.status}] );
 			});
 
 		});

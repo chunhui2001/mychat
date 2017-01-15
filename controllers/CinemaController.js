@@ -3,14 +3,11 @@
 var moment = require('moment');
 
 var redisClient = require('../providers/RedisProvider')['REDIS_CINEMA_CLIENT'];
-var _AMQP_PROVIDER = require('../providers/AmqpProvider');
-var amqpClient = _AMQP_PROVIDER['AMQP_CLIENT'];
-var _TICKET_EVENT_QUEUE = _AMQP_PROVIDER['queues']['ticket_event'];
 
 var InvalidRequestError = require('../errors/InvalidRequestError');
-
 var TicketPoolRepository = require('../repository/cinema/TicketPoolRepository');
 var TicketQueneRepository = require('../repository/cinema/TicketQueneRepository');
+var AmqpRespository = require('../repository/AmqpRespository');
 
 var TicketQueneRepo = new TicketQueneRepository();
 var TicketPoolRepo = new TicketPoolRepository();
@@ -105,37 +102,21 @@ module.exports = {
 				tickets.forEach(function(ticket) {
 					ticket = JSON.parse(ticket);
 					ticket.status= 'locked';
+					ticket.belongTo = res.locals.user.id + '';
 					ticket.expiredAt = parseInt(moment().add(25, 'minutes').format('x'));
 					keys_pool.push(ticket.key);
 					values_pool.push(JSON.stringify(ticket));
 				});
 
 				TicketPoolRepo.update(keys_pool, values_pool, redisClient).done(function (ok) {
-
 					// 将状态变化广播出去
-					var message = {
-						to: res.locals.socketTicket,
-						content: values_pool.map(function (ticket) { return { key: JSON.parse(ticket).key, status: JSON.parse(ticket).status}; })
-					};
-
-					var queue = _TICKET_EVENT_QUEUE;
-
-					// RabbitMQ
-					// Publisher
-					amqpClient.then(function(conn) {
-					  return conn.createChannel();
-					}).then(function(ch) {
-					  return ch.assertQueue(queue).then(function(ok) {
-					    return ch.sendToQueue(queue, new Buffer(JSON.stringify(message)));
-					  });
-					}).catch(console.warn);
-
+					AmqpRespository.publish(res.locals.socketTicket, 
+						values_pool.map(function (ticket) { return { key: JSON.parse(ticket).key, status: JSON.parse(ticket).status}; }));
 				});
-
 
 				var keys_quene = [];
 				var values_quene = [];
-				// 
+				
 				tickets.forEach(function(ticket) {
 					ticket = JSON.parse(ticket);
 					ticket.status = 'locked';
