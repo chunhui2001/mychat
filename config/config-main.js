@@ -13,7 +13,7 @@ module.exports = {
         	MONGO_OPTIONS: { db: { safe: true } }
     	},
     	amqp: {
-    		AMQP_URI: "amqp://localhost",
+    		AMQP_URI: "amqp://keesh:Cc@192.168.0.102",
     		AMQP_OPTIONS: null
     	},
     	redis: {

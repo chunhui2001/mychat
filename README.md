@@ -62,6 +62,8 @@ $ sudo vi /etc/haproxy/haproxy.cfg
 # http://blog.csdn.net/anzhsoft/article/details/19563091
 > http://localhost:15672
 > http://www.rabbitmq.com/devtools.html
+> https://www.rabbitmq.com/management.html
+> http://linuxpitstop.com/rabbitmq-cluster-on-centos-7/
 
 
 # Redis Cluster
